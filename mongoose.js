@@ -56,7 +56,7 @@ const updateScore = async (req, res) => {
     }
 
     if (score <= user.score) {
-      return res.status(500).json("Score must be greater than current score");
+      return res.json("Score must be greater than current score");
     }
     user.score = score;
     await user.save();
