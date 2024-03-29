@@ -1,5 +1,10 @@
 const express = require("express");
-const { getTopUsers, createUser, updateScore, run, getUserScore } = require("./mongoose");
+const {
+  getTopUsers,
+  updateScore,
+  run,
+  getUserScore,
+} = require("./mongoose");
 const app = express();
 const cors = require("cors");
 const port = 3000;
