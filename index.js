@@ -20,8 +20,7 @@ app.use(
 );
 
 app.get("/user", getTopUsers);
-app.post("/user", createUser);
-app.put("/user", updateScore);
+app.post("/user", updateScore);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

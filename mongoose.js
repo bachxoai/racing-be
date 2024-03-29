@@ -31,25 +31,20 @@ const getTopUsers = async (req, res) => {
   }
 };
 
-const createUser = async (req, res) => {
-  const { username } = req.body;
-  try {
-    const user = new User({ username, score: 0 });
-    await user.save();
-    res.json(user);
-  } catch (error) {
-    return res.status(500).send("Error: " + error);
-  }
-};
-
 const updateScore = async (req, res) => {
   const { username, score } = req.body;
   try {
     const user = await User.findOne({ username });
+
+    if (!user) {
+      const user = new User({ username, score });
+      await user.save();
+      res.json(user);
+    }
+
     if (score <= user.score) {
       return res.status(400).json("Score must be greater than current score");
     }
-    console.log(user);
     user.score = score;
     await user.save();
     res.json(user);
@@ -61,7 +56,6 @@ const updateScore = async (req, res) => {
 module.exports = {
   UserSchema,
   getTopUsers,
-  createUser,
   updateScore,
   uri,
   clientOptions,
