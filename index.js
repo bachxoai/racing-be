@@ -1,5 +1,5 @@
 const express = require("express");
-const { getTopUsers, createUser, updateScore, run } = require("./mongoose");
+const { getTopUsers, createUser, updateScore, run, getUserScore } = require("./mongoose");
 const app = express();
 const cors = require("cors");
 const port = 3000;
@@ -20,6 +20,7 @@ app.use(
 );
 
 app.get("/user", getTopUsers);
+app.get("/user/:username", getUserScore);
 app.post("/user", updateScore);
 
 app.listen(port, () => {

@@ -31,6 +31,19 @@ const getTopUsers = async (req, res) => {
   }
 };
 
+const getUserScore = async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    res.json(user);
+  } catch (error) {
+    return res.status(500).send("Error: " + error);
+  }
+};
+
 const updateScore = async (req, res) => {
   const { username, score } = req.body;
   try {
@@ -57,6 +70,7 @@ module.exports = {
   UserSchema,
   getTopUsers,
   updateScore,
+  getUserScore,
   uri,
   clientOptions,
   run,
