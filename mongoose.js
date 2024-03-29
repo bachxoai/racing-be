@@ -27,7 +27,7 @@ const getTopUsers = async (req, res) => {
     res.json(users);
     return users;
   } catch (error) {
-    return res.status(500).send("Error: " + error);
+    return res.status(500).json({ error: error });
   }
 };
 
@@ -40,7 +40,7 @@ const getUserScore = async (req, res) => {
     }
     res.json(user);
   } catch (error) {
-    return res.status(500).send("Error: " + error);
+    return res.status(500).json({ error: error });
   }
 };
 
@@ -50,19 +50,19 @@ const updateScore = async (req, res) => {
     const user = await User.findOne({ username });
 
     if (!user) {
-      const user = new User({ username, score });
+      const user = new User({ username, score: 0 });
       await user.save();
-      res.json(user);
+      return res.json(user);
     }
 
     if (score <= user.score) {
-      return res.status(400).json("Score must be greater than current score");
+      return res.status(500).json("Score must be greater than current score");
     }
     user.score = score;
     await user.save();
     res.json(user);
   } catch (error) {
-    return res.status(500).send("Error: " + error);
+    return res.status(500).json({ error: error });
   }
 };
 
