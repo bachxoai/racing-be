@@ -4,6 +4,7 @@ const {
   updateScore,
   run,
   getUserScore,
+  buySkin,
 } = require("./mongoose");
 const app = express();
 const cors = require("cors");
@@ -27,6 +28,7 @@ app.use(
 app.get("/user", getTopUsers);
 app.get("/user/:username", getUserScore);
 app.post("/user", updateScore);
+app.post("/buy", buySkin);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

@@ -17,6 +17,8 @@ async function run() {
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   score: { type: Number },
+  coins: { type: Number },
+  skins: [Boolean],
 });
 
 const User = new mongoose.model("User", UserSchema);
@@ -50,21 +52,49 @@ const updateScore = async (req, res) => {
     const user = await User.findOne({ username });
 
     if (!user) {
-      const user = new User({ username, score: 0, coins: 0 });
+      const user = new User({
+        username,
+        score: 0,
+        coins: 0,
+        skins: [false, false, false, false],
+      });
       await user.save();
       return res.json(user);
     }
 
-    if (user.coins) {
+    if (!user.coins) {
       user.coins = coins;
+    } else {
+      user.coins = user.coins + coins;
     }
-    user.coins += coins;
-    await user.save();
 
     if (score <= user.score) {
-      return res.json("Score must be greater than current score");
+      await user.save();
+      return res.json({
+        message: "Score must be greater than current score",
+        user,
+      });
     }
     user.score = score;
+    await user.save();
+    res.json(user);
+  } catch (error) {
+    return res.status(500).json({ error: error });
+  }
+};
+
+const buySkin = async (req, res) => {
+  const { username, skinId } = req.body;
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    if (user.coins < 100) {
+      return res.status(400).send("Not enough coins");
+    }
+    user.coins = user.coins - 100;
+    user.skins[skinId] = true;
     await user.save();
     res.json(user);
   } catch (error) {
@@ -77,6 +107,7 @@ module.exports = {
   getTopUsers,
   updateScore,
   getUserScore,
+  buySkin,
   uri,
   clientOptions,
   run,
