@@ -54,15 +54,16 @@ const updateScore = async (req, res) => {
       await user.save();
       return res.json(user);
     }
+    
+    if (user.coins) {
+      user.coins = coins;
+    }
+    user.coins += coins;
 
     if (score <= user.score) {
       return res.json("Score must be greater than current score");
     }
     user.score = score;
-    if (user.coins) {
-      user.coins = coins;
-    }
-    user.coins += coins;
     await user.save();
     res.json(user);
   } catch (error) {
