@@ -56,7 +56,7 @@ const updateScore = async (req, res) => {
         username,
         score: 0,
         coins: 0,
-        skins: [false, false, false, false],
+        skins: [true, false, false, false],
       });
       await user.save();
       return res.json(user);
