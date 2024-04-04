@@ -45,12 +45,12 @@ const getUserScore = async (req, res) => {
 };
 
 const updateScore = async (req, res) => {
-  const { username, score } = req.body;
+  const { username, score, coins } = req.body;
   try {
     const user = await User.findOne({ username });
 
     if (!user) {
-      const user = new User({ username, score: 0 });
+      const user = new User({ username, score: 0, coins: 0 });
       await user.save();
       return res.json(user);
     }
@@ -59,6 +59,10 @@ const updateScore = async (req, res) => {
       return res.json("Score must be greater than current score");
     }
     user.score = score;
+    if (user.coins) {
+      user.coins = coins;
+    }
+    user.coins += coins;
     await user.save();
     res.json(user);
   } catch (error) {
