@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
-const uri =
-  "mongodb+srv://bachxoai:2212@bachxoai-cluster.a8vn8ny.mongodb.net/racing-db";
+require("dotenv").config(); 
+
+const uri = process.env.MONGODB_URI;
 const clientOptions = {
   serverApi: { version: "1", strict: true, deprecationErrors: true },
 };
